@@ -15,5 +15,4 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.antlr.v4.runtime.atn.PredictionMode$AltAndContextMap"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="spring-boot-data-with-thymeleaf"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="spring-boot-data-with-thymeleaf"/>
-    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 </launchConfiguration>

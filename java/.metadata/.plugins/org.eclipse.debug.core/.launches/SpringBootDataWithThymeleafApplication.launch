@@ -11,5 +11,4 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.spring_boot_data_with_thymeleaf.SpringBootDataWithThymeleafApplication"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value=""/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="spring-boot-data-with-thymeleaf"/>
-    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 </launchConfiguration>

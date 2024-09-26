@@ -1,124 +1,62 @@
-package com;
+package com.service;
 
-import java.io.*;
+import com.model.Account;
+import com.repository.AccountRepository;
 
-import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class AccountService {
 
-import java.util.Optional;
+    @Autowired
+    private AccountRepository accountRepository;
 
-
-
-public class ProductService {
-
-
-
-    private List<Product> products = new ArrayList<>();
-
-    private static final String FILE_NAME = "product.ser";
-
-
-
-    public ProductService() {
-
-        loadProducts();
-
-    }
-
-
-
-    public void addProduct(Product product) {
-
-        products.add(product);
-
-        saveProducts();
-
-    }
-
-
-
-    public void deleteProduct(int pid) {
-
-        products.removeIf(product -> product.getPid() == pid);
-
-        saveProducts();
-
-    }
-
-
-
-    public void updateProduct(int pid, String pname, double price) {
-
-        Optional<Product> productOpt = products.stream()
-
-                                                .filter(product -> product.getPid() == pid)
-
-                                                .findFirst();
-
-        if (productOpt.isPresent()) {
-
-            Product product = productOpt.get();
-
-            product.setPname(pname);
-
-            product.setPrice(price);
-
-            saveProducts();
-
+    public Account createAccount(String accountNo, String name, double amount) {
+        if (amount <= 1000) {
+            throw new IllegalArgumentException("Amount must be greater than 1000");
         }
 
-    }
-
-
-
-    public List<Product> retrieveProducts() {
-
-        return products;
-
-    }
-
-
-
-    private void saveProducts() {
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
-
-            oos.writeObject(products);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
+        if (accountRepository.existsById(accountNo)) {
+            throw new IllegalArgumentException("Account number must be unique");
         }
 
+        Account account = new Account(accountNo, name, amount);
+        return accountRepository.save(account);
     }
 
-
-
-   
-
-    private void loadProducts() {
-
-        File file = new File(FILE_NAME);
-
-        if (file.exists()) {
-
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
-
-                products = (List<Product>) ois.readObject();
-
-            } catch (IOException | ClassNotFoundException e) {
-
-                e.printStackTrace();
-
+    public String deposit(String accountNo, double amount, String panCardNumber) {
+        if (amount > 50000) {
+            if (panCardNumber == null || panCardNumber.isEmpty()) {
+                return "PAN card number required for deposits over 50,000";
             }
-
         }
 
+        Account account = accountRepository.findById(accountNo)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        account.setAmount(account.getAmount() + amount);
+        accountRepository.save(account);
+        return "Deposit successful";
     }
 
+    public String withdraw(String accountNo, double amount) {
+        Account account = accountRepository.findById(accountNo)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        if (account.getAmount() - amount < 1000) {
+            return "Insufficient funds to maintain minimum balance";
+        }
+
+        account.setAmount(account.getAmount() - amount);
+        accountRepository.save(account);
+        return "Withdrawal successful";
+    }
+
+    public double checkBalance(String accountNo) {
+        Account account = accountRepository.findById(accountNo)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        return account.getAmount();
+    }
 }
-
-
-
