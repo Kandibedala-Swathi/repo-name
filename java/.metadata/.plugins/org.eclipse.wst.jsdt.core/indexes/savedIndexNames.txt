@@ -1,0 +1,2 @@
+INDEX VERSION 1.4+C:\Users\Administrator\Desktop\Assignments\Thymeleaf\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3282620296.index
